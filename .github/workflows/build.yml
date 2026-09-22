@@ -27,6 +27,21 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: JavaとKotlinのJVM設定を統一
+        working-directory: project
+        run: |
+          python3 - <<'PY'
+          p = "app/build.gradle.kts"
+          s = open(p, encoding="utf-8").read()
+          s += """
+          
+          kotlin {
+              jvmToolchain(17)
+          }
+          """
+          open(p, "w", encoding="utf-8").write(s)
+          PY
+
       - name: APKをビルド
         working-directory: project
         run: gradle assembleDebug
